@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	<!-- NMML reference: https://gist.github.com/1763850 -->
+	
+	<!-- metadata, make sure 'package' is at least 3 segments (ie. com.mycompany.myproject) -->
+	<meta title="ggj14" package="ggj14" version="1.0.0" company="Jaroslav Meloun - jarnik - www.jarnik.com" />
+	
+	<!-- output -->
+	<app main="ggj14.Main" file="ggj14" path="bin" />
+	
+	<window background="#000000" fps="60" />
+	<window width="800" height="480" unless="mobile" />
+	<window orientation="landscape" vsync="false" antialiasing="0" if="cpp" />
+	
+	<!-- classpath, haxe libs -->
+	<source path="src" />
+	<haxelib name="openfl" />
+	<haxelib name="actuate" />
+	<haxelib name="openfl-compatibility" />
+	<haxelib name="format" />
+	<haxelib name="svg" />
+    <haxelib name="actuate" />
+	<haxelib name="hsl-pico-1" />
+	
+	<assets path="assets/pug" include="gui.pug" />
+    <assets path="assets" include="*.png" exclude="nme.svg" />
+    <assets path="assets/fonts" type="font" include="*" />
+	
+	<!-- optimize output
+	<haxeflag name="-dce full" /> -->
+	
+</project>
