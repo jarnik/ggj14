@@ -14,7 +14,7 @@ class PlayScene extends Scene
 	{
 		super.create();
 		
-		addChild( Render.renderGroupStates("unitIcon") );
+		addChild( Render.renderGroupStates("half") );
 	}
 	
 }

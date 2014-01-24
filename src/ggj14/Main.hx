@@ -21,7 +21,7 @@ class Main extends Gaxe
 	}
 	
 	private static function onLibLoaded():Void {
-		Gaxe.loadGaxe( new Main(), new Menu(), 0, 0 );
+		Gaxe.loadGaxe( new Main(), new Menu(), 426, 240 );
 	} 
 
     public function new() {
