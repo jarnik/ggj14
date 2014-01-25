@@ -22,6 +22,7 @@ class PlayScene extends Scene
 	
 	private var left:Player;
 	private var right:Player;
+	private var timer:Float;
 	public static var characters:Array<CHARACTER>;
 	
 	override private function create():Void 
@@ -68,6 +69,18 @@ class PlayScene extends Scene
 			else
 				left.receiveToStashPile( randomizedStash.pop() );
 		}
+		
+		timer = 30;
+	}
+	
+	override public function update(elapsed:Float):Void 
+	{
+		super.update(elapsed);
+		
+		timer -= elapsed;
+		
+		left.setTime( timer );
+		right.setTime( timer );
 	}
 	
 	override public function handleKey(e:KeyboardEvent):Void 

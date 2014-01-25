@@ -174,6 +174,11 @@ class Player extends Sprite
 		cast( gui.fetch( prefix + "." + name ), RenderImage ).render( i.index );
 	}
 	
+	public function setTime( time:Float ):Void {
+		var secs:Int = Math.floor( time );
+		gui.fetch( "stats.time" ).setLabel( Std.string( secs ) );
+	}
+	
 	private function use( i:ITEM ):Void {
 		var discard:ITEM = null;
 		switch ( i.part ) {
