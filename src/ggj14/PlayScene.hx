@@ -12,14 +12,18 @@ import ggj14.Player;
  * ...
  * @author Jaroslav Meloun - jarnik - www.jarnik.com
  */
+
+typedef CHARACTER = {
+	name:String
+}
+ 
 class PlayScene extends Scene
 {
 	
 	private var left:Player;
 	private var right:Player;
+	private var characters:Array<CHARACTER>;
 	
-	private var stash:Array<ITEM>;
-
 	override private function create():Void 
 	{
 		super.create();
@@ -28,23 +32,42 @@ class PlayScene extends Scene
 		addChild( right = new Player( false ) );
 		right.x = Gaxe.w / 2;
 		
-		stash = [
-			{ part:HEAD, index: 0 },
-			{ part:HEAD, index: 1 },
-			{ part:FACE, index: 0 },
-			{ part:FACE, index: 1 },
-			{ part:BODY, index: 0 },
-			{ part:BODY, index: 1 }
-		];
-		
 		left.onDiscard.bind( onDiscard );
 		left.onPass.bind( onPass );
 		right.onDiscard.bind( onDiscard );
 		right.onPass.bind( onPass );
 		
-		//left.receiveFromStash( stash[ 0 ] );
-		left.receiveToStashPile( stash[ 0 ] );
-		right.receiveToStashPile( stash[ 1 ] );
+		characters = [
+			{ name: "DOG" },
+			{ name: "GRANDMA" }
+		];
+		
+		var stash:Array<ITEM> = [];
+		for ( i in 0...characters.length ) {
+			stash.push( { part:HEAD, index: i } );
+			stash.push( { part:FACE, index: i } );
+			stash.push( { part:BODY, index: i } );
+		}
+		
+		var randomizedStash:Array<ITEM> = [];
+		var item:ITEM;
+		while ( stash.length > 0 ) {
+			item = stash[ Math.floor( stash.length * Math.random() ) ];
+			stash.remove( item );
+			randomizedStash.push( item );
+		}
+		
+		var half:Int = Math.floor(characters.length * 3 / 2);
+		for ( i in 0...half ) {
+			left.receiveToStashPile( randomizedStash.pop() );
+			right.receiveToStashPile( randomizedStash.pop() );
+		}
+		if ( randomizedStash.length > 0 ) {
+			if ( Math.random() > 0.5 )
+				right.receiveToStashPile( randomizedStash.pop() );
+			else
+				left.receiveToStashPile( randomizedStash.pop() );
+		}
 	}
 	
 	override public function handleKey(e:KeyboardEvent):Void 
