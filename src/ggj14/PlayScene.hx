@@ -18,6 +18,7 @@ typedef CHARACTER = {
 }
 
 enum GAME_STATE {
+	STATE_START;
 	STATE_PLAY;
 	STATE_FINISH;
 }
@@ -39,7 +40,7 @@ class PlayScene extends Scene
 		addChild( right = new Player( false ) );
 		right.x = Gaxe.w / 2;
 		
-		addChild( screen = Render.renderGroupStates("screen",null,"main") );
+		addChild( screen = Render.renderGroupStates("screen",null,"play") );
 		
 		left.onDiscard.bind( onDiscard );
 		left.onPass.bind( onPass );
@@ -50,24 +51,29 @@ class PlayScene extends Scene
 	
 	override private function reset():Void 
 	{
-		switchState( STATE_PLAY );
+		switchState( STATE_START );
 	}
 	
 	override private function handleSwitchState(id:Dynamic):Bool 
 	{
 		switch ( cast( id, GAME_STATE ) ) {
+			case STATE_START:
+				screen.switchState("split", true );
+				timer = 4;
+				left.reset();
+				right.reset();
 			case STATE_PLAY:
-				screen.fetch("restart").visible = false;
+				screen.switchState("play", true );
 				timer = 30;
 				left.reset();
 				right.reset();
 				shuffle();
 			case STATE_FINISH:
+				screen.switchState("restart", true );
 				left.hideButtons();
 				right.hideButtons();
 				left.showScore( right.indexMine );
 				right.showScore( left.indexMine );
-				screen.fetch("restart").visible = true;
 		}
 		return true;
 	}
@@ -106,6 +112,13 @@ class PlayScene extends Scene
 		super.update(elapsed);
 		
 		switch ( cast( state, GAME_STATE ) ) {
+			case STATE_START:
+				timer -= elapsed;
+				timer = Math.max( 0, timer );
+				screen.fetch("splitLeft.timer").setLabel( Std.string( Math.floor( timer ) ) );
+				screen.fetch("splitRight.timer").setLabel( Std.string( Math.floor( timer ) ) );
+				if ( timer <= 0 )
+					switchState( STATE_PLAY );
 			case STATE_PLAY:
 				timer -= elapsed;
 				timer = Math.max( 0, timer );
@@ -125,6 +138,7 @@ class PlayScene extends Scene
 			return;
 			
 		switch ( cast( state, GAME_STATE ) ) {
+			case STATE_START:
 			case STATE_PLAY:
 				switch ( e.keyCode ) {
 					// LEFT
