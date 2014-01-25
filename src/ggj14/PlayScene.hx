@@ -64,12 +64,12 @@ class PlayScene extends Scene
 				right.reset();
 			case STATE_PLAY:
 				screen.switchState("play", true );
-				timer = 30;
+				timer = 300;
 				left.reset();
 				right.reset();
 				shuffle();
 			case STATE_FINISH:
-				screen.switchState("restart", true );
+				screen.switchState("finish", true );
 				left.hideButtons();
 				right.hideButtons();
 				left.showScore( right.indexMine );
