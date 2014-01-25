@@ -139,6 +139,14 @@ class Player extends Sprite
 		
 		gui.fetch("stats.mine").setLabel( PlayScene.characters[ indexMine ].name );
 		gui.fetch("stats.opponent").setLabel( PlayScene.characters[ indexGuess ].name );
+		
+		var hasFromOpponent:Bool = (currentFromOpponent != null);
+		gui.fetch("btnUseOpponent").visible = hasFromOpponent;
+		gui.fetch("btnDiscardOpponent").visible = hasFromOpponent;
+		
+		var hasFromPile:Bool = (currentFromPile != null);
+		gui.fetch("btnUsePile").visible = hasFromPile;
+		gui.fetch("btnPassPile").visible = hasFromPile;
 	}
 	
 	private function showUsedPart( prefix:String, index:Int ):Void {
