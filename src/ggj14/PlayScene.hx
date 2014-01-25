@@ -16,6 +16,11 @@ import ggj14.Player;
 typedef CHARACTER = {
 	name:String
 }
+
+enum GAME_STATE {
+	STATE_PLAY;
+	STATE_FINISH;
+}
  
 class PlayScene extends Scene
 {
@@ -70,17 +75,34 @@ class PlayScene extends Scene
 				left.receiveToStashPile( randomizedStash.pop() );
 		}
 		
-		timer = 30;
+		switchState( STATE_PLAY );
+		
+	}
+	
+	override private function handleSwitchState(id:Dynamic):Bool 
+	{
+		switch ( cast( id, GAME_STATE ) ) {
+			case STATE_PLAY:
+				timer = 3;
+			case STATE_FINISH:
+		}
+		return true;
 	}
 	
 	override public function update(elapsed:Float):Void 
 	{
 		super.update(elapsed);
 		
-		timer -= elapsed;
-		
-		left.setTime( timer );
-		right.setTime( timer );
+		switch ( cast( state, GAME_STATE ) ) {
+			case STATE_PLAY:
+				timer -= elapsed;
+				timer = Math.max( 0, timer );
+				left.setTime( timer );
+				right.setTime( timer );
+				if ( timer <= 0 )
+					switchState( STATE_FINISH );
+			case STATE_FINISH:
+		}
 	}
 	
 	override public function handleKey(e:KeyboardEvent):Void 
@@ -88,6 +110,9 @@ class PlayScene extends Scene
 		super.handleKey(e);
 		
 		if ( e.type != KeyboardEvent.KEY_UP )
+			return;
+			
+		if ( state != STATE_PLAY )
 			return;
 			
 		//trace("key "+e.keyCode);
