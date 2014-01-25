@@ -58,7 +58,7 @@ class PlayScene extends Scene
 		switch ( cast( id, GAME_STATE ) ) {
 			case STATE_PLAY:
 				screen.fetch("restart").visible = false;
-				timer = 3;
+				timer = 30;
 				left.reset();
 				right.reset();
 				shuffle();

@@ -21,7 +21,7 @@ class CardScene extends Scene
 		
 		setCard( 0, 0 );
 		setCard( 1, 1 );
-		//setCard( 0, 0 );
+		setCard( 2, 2 );
 	}
 	
 	private function setCard( cardIndex:Int, characterIndex:Int ):Void {

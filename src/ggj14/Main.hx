@@ -36,7 +36,8 @@ class Main extends Gaxe
 		
 		PlayScene.characters = [
 			{ name: "DOG" },
-			{ name: "GRANDMA" }
+			{ name: "GRANDMA" },
+			{ name: "CLOWN" }
 		];
 		
         //switchScene( PlayScene );        
