@@ -1,6 +1,7 @@
 package ggj14;
 
 import ggj14.Player.ITEM;
+import ggj14.Player.KEYLABELS;
 import hsl.haxe.DirectSignaler.DirectSignaler;
 import nme.display.BitmapData;
 import nme.display.Sprite;
@@ -28,6 +29,15 @@ typedef ITEM_MOVE = {
 	p:Player,
 	i:ITEM
 }
+
+typedef KEYLABELS = {
+	opponentUse:String,
+	opponentDiscard:String,
+	pileUse:String,
+	pilePass:String,
+	changeMine:String,
+	changeGuess:String
+}
  
 class Player extends Sprite
 {
@@ -46,7 +56,7 @@ class Player extends Sprite
 	public var onDiscard:DirectSignaler<ITEM_MOVE>;
 	public var onPass:DirectSignaler<ITEM_MOVE>;
 
-	public function new() 
+	public function new( left:Bool ) 
 	{
 		super();
 		
@@ -56,8 +66,39 @@ class Player extends Sprite
 		onDiscard = new DirectSignaler(this);
 		onPass = new DirectSignaler(this);
 		
-		addChild( gui = Render.renderGroupStates("half") );
+		var keys:KEYLABELS;
+		if ( left ) {
+			keys = { 
+				opponentUse:"W",
+				opponentDiscard:"Q",
+				pileUse:"S",
+				pilePass:"D",
+				changeMine:"X",
+				changeGuess:"E"
+			};
+		} else {
+			keys = { 
+				opponentUse:"5",
+				opponentDiscard:"6",
+				pileUse:"2",
+				pilePass:"1",
+				changeMine:"0",
+				changeGuess:"8"
+			};
+		}
+		
+		addChild( gui = Render.renderGroupStates("half", null, left ? "left" : "right" ) );
+		labelKeys( keys );
 		update();
+	}
+	
+	private function labelKeys( keys:KEYLABELS ):Void {
+		gui.fetch("btnUseOpponent.lbl").setLabel( keys.opponentUse );
+		gui.fetch("btnDiscardOpponent.lbl").setLabel( keys.opponentDiscard );
+		gui.fetch("btnUsePile.lbl").setLabel( keys.pileUse );
+		gui.fetch("btnPassPile.lbl").setLabel( keys.pilePass );
+		gui.fetch("stats.changeGuess.lbl").setLabel( keys.changeGuess );
+		gui.fetch("stats.changeMine.lbl").setLabel( keys.changeMine );
 	}
 	
 	public function receiveToStashPile( i:ITEM ):Void {

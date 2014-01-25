@@ -24,8 +24,8 @@ class PlayScene extends Scene
 	{
 		super.create();
 		
-		addChild( left = new Player() );
-		addChild( right = new Player() );
+		addChild( left = new Player( true ) );
+		addChild( right = new Player( false ) );
 		right.x = Gaxe.w / 2;
 		
 		stash = [
@@ -70,13 +70,13 @@ class PlayScene extends Scene
 			case Keyboard.X:
 				left.changeMine();
 			// RIGHT
-			case Keyboard.NUMPAD_4:
+			case Keyboard.NUMPAD_6:
 				right.fromOpponentDiscard();
 			case Keyboard.NUMPAD_5:
 				right.fromOpponentUse();
 			case Keyboard.NUMPAD_2:
 				right.fromPileUse();
-			case Keyboard.NUMPAD_3:
+			case Keyboard.NUMPAD_1:
 				right.fromPilePass();
 			case Keyboard.NUMPAD_8:
 				right.changeGuess();
