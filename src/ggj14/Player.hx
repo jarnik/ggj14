@@ -157,14 +157,24 @@ class Player extends Sprite
 	}
 	
 	private function use( i:ITEM ):Void {
+		var discard:ITEM = null;
 		switch ( i.part ) {
 			case HEAD:
+				if ( currentHead != null )
+					discard = currentHead;
 				currentHead = i;
 			case FACE:
+				if ( currentFace != null )
+					discard = currentFace;
 				currentFace = i;
 			case BODY:
+				if ( currentBody != null )
+					discard = currentBody;
 				currentBody = i;
 		}
+		
+		if ( discard != null )
+			onDiscard.dispatch( { p:this, i:discard } );
 	}
 	
 	public function fromOpponentUse():Void {

@@ -44,6 +44,7 @@ class PlayScene extends Scene
 		
 		//left.receiveFromStash( stash[ 0 ] );
 		left.receiveToStashPile( stash[ 0 ] );
+		right.receiveToStashPile( stash[ 1 ] );
 	}
 	
 	override public function handleKey(e:KeyboardEvent):Void 
