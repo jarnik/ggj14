@@ -35,22 +35,21 @@ class PlayScene extends Scene
 	{
 		super.create();
 		
-		characters = [
-			{ name: "DOG" },
-			{ name: "GRANDMA" }
-		];
-		
 		addChild( left = new Player( true ) );
 		addChild( right = new Player( false ) );
 		right.x = Gaxe.w / 2;
 		
-		addChild( screen = Render.renderGroupStates("screen") );
+		addChild( screen = Render.renderGroupStates("screen",null,"main") );
 		
 		left.onDiscard.bind( onDiscard );
 		left.onPass.bind( onPass );
 		right.onDiscard.bind( onDiscard );
 		right.onPass.bind( onPass );
 		
+	}
+	
+	override private function reset():Void 
+	{
 		switchState( STATE_PLAY );
 	}
 	
@@ -158,7 +157,8 @@ class PlayScene extends Scene
 			case STATE_FINISH:
 				switch ( e.keyCode ) {
 					case Keyboard.SPACE:
-						switchState( STATE_PLAY );
+						//switchState( STATE_PLAY );
+						Gaxe.switchGlobalScene( CardScene );
 				}
 		}
 			

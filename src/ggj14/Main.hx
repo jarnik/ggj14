@@ -33,7 +33,14 @@ class Main extends Gaxe
     override private function init():Void {
         super.init();
         log( " progress " );		
-        switchScene( PlayScene );        
+		
+		PlayScene.characters = [
+			{ name: "DOG" },
+			{ name: "GRANDMA" }
+		];
+		
+        //switchScene( PlayScene );        
+        switchScene( CardScene );        
     }
 	
 	override public function handleTouch( e:TouchEvent ):Void { 
