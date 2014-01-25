@@ -8,6 +8,7 @@ import nme.display.Sprite;
 import pug.render.Render;
 import pug.render.RenderGroupStates;
 import pug.render.RenderImage;
+import ggj14.PlayScene;
 
 /**
  * ...
@@ -55,10 +56,16 @@ class Player extends Sprite
 	
 	public var onDiscard:DirectSignaler<ITEM_MOVE>;
 	public var onPass:DirectSignaler<ITEM_MOVE>;
+	
+	public var indexMine:Int;
+	public var indexGuess:Int;
 
 	public function new( left:Bool ) 
 	{
 		super();
+		
+		indexMine = Math.floor( PlayScene.characters.length * Math.random() );
+		indexGuess = Math.floor( PlayScene.characters.length * Math.random() );
 		
 		stashPile = [];
 		stashOpponent = [];
@@ -129,6 +136,9 @@ class Player extends Sprite
 			
 		showItem( "itemUp", currentFromOpponent );
 		showItem( "itemDown", currentFromPile );
+		
+		gui.fetch("stats.mine").setLabel( PlayScene.characters[ indexMine ].name );
+		gui.fetch("stats.opponent").setLabel( PlayScene.characters[ indexGuess ].name );
 	}
 	
 	private function showUsedPart( prefix:String, index:Int ):Void {
@@ -228,10 +238,12 @@ class Player extends Sprite
 	}
 	
 	public function changeMine():Void {
-		
+		indexMine = (indexMine + 1) % PlayScene.characters.length;
+		update();
 	}
 	
 	public function changeGuess():Void {
-		
+		indexGuess = (indexGuess + 1) % PlayScene.characters.length;
+		update();
 	}
 }

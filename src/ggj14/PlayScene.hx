@@ -22,11 +22,16 @@ class PlayScene extends Scene
 	
 	private var left:Player;
 	private var right:Player;
-	private var characters:Array<CHARACTER>;
+	public static var characters:Array<CHARACTER>;
 	
 	override private function create():Void 
 	{
 		super.create();
+		
+		characters = [
+			{ name: "DOG" },
+			{ name: "GRANDMA" }
+		];
 		
 		addChild( left = new Player( true ) );
 		addChild( right = new Player( false ) );
@@ -36,11 +41,6 @@ class PlayScene extends Scene
 		left.onPass.bind( onPass );
 		right.onDiscard.bind( onDiscard );
 		right.onPass.bind( onPass );
-		
-		characters = [
-			{ name: "DOG" },
-			{ name: "GRANDMA" }
-		];
 		
 		var stash:Array<ITEM> = [];
 		for ( i in 0...characters.length ) {
