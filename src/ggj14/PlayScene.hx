@@ -85,6 +85,10 @@ class PlayScene extends Scene
 			case STATE_PLAY:
 				timer = 3;
 			case STATE_FINISH:
+				left.hideButtons();
+				right.hideButtons();
+				left.showScore( right.indexMine );
+				right.showScore( left.indexMine );
 		}
 		return true;
 	}

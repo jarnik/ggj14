@@ -147,6 +147,44 @@ class Player extends Sprite
 		var hasFromPile:Bool = (currentFromPile != null);
 		gui.fetch("btnUsePile").visible = hasFromPile;
 		gui.fetch("btnPassPile").visible = hasFromPile;
+		
+		gui.fetch("stats.changeGuess").visible = true;
+		gui.fetch("stats.changeMine").visible = true;
+		gui.fetch("score").visible = false;
+	}
+	
+	public function hideButtons():Void {
+		gui.fetch("btnUseOpponent").visible = false;
+		gui.fetch("btnDiscardOpponent").visible = false;
+		gui.fetch("btnUsePile").visible = false;
+		gui.fetch("btnPassPile").visible = false;
+		gui.fetch("stats.changeGuess").visible = false;
+		gui.fetch("stats.changeMine").visible = false;
+		gui.fetch("itemUp").visible = false;
+		gui.fetch("itemDown").visible = false;
+	}
+	
+	public function showScore( opponentIndex:Int ):Void {
+		
+		var scoreGuess:Int = 0;
+		if ( opponentIndex == indexGuess )
+			scoreGuess = 30;
+		
+		var scoreHead:Int = 0;
+		if ( currentHead != null && currentHead.index == indexMine )
+			scoreHead = 10;
+		var scoreFace:Int = 0;
+		if ( currentFace != null && currentFace.index == indexMine )
+			scoreFace = 10;
+		var scoreBody:Int = 0;
+		if ( currentBody != null && currentBody.index == indexMine )
+			scoreBody = 10;
+		
+		gui.fetch("score").visible = true;
+		gui.fetch("score.guess").setLabel("+"+Std.string( scoreGuess ));
+		gui.fetch("score.head").setLabel("+"+Std.string( scoreHead ));
+		gui.fetch("score.face").setLabel("+"+Std.string( scoreFace ));
+		gui.fetch("score.body").setLabel("+"+Std.string( scoreBody ));
 	}
 	
 	private function showUsedPart( prefix:String, index:Int ):Void {
