@@ -28,6 +28,7 @@ class PlayScene extends Scene
 	private var left:Player;
 	private var right:Player;
 	private var timer:Float;
+	private var screen:RenderGroupStates;
 	public static var characters:Array<CHARACTER>;
 	
 	override private function create():Void 
@@ -43,11 +44,36 @@ class PlayScene extends Scene
 		addChild( right = new Player( false ) );
 		right.x = Gaxe.w / 2;
 		
+		addChild( screen = Render.renderGroupStates("screen") );
+		
 		left.onDiscard.bind( onDiscard );
 		left.onPass.bind( onPass );
 		right.onDiscard.bind( onDiscard );
 		right.onPass.bind( onPass );
 		
+		switchState( STATE_PLAY );
+	}
+	
+	override private function handleSwitchState(id:Dynamic):Bool 
+	{
+		switch ( cast( id, GAME_STATE ) ) {
+			case STATE_PLAY:
+				screen.fetch("restart").visible = false;
+				timer = 3;
+				left.reset();
+				right.reset();
+				shuffle();
+			case STATE_FINISH:
+				left.hideButtons();
+				right.hideButtons();
+				left.showScore( right.indexMine );
+				right.showScore( left.indexMine );
+				screen.fetch("restart").visible = true;
+		}
+		return true;
+	}
+	
+	private function shuffle():Void {
 		var stash:Array<ITEM> = [];
 		for ( i in 0...characters.length ) {
 			stash.push( { part:HEAD, index: i } );
@@ -74,23 +100,6 @@ class PlayScene extends Scene
 			else
 				left.receiveToStashPile( randomizedStash.pop() );
 		}
-		
-		switchState( STATE_PLAY );
-		
-	}
-	
-	override private function handleSwitchState(id:Dynamic):Bool 
-	{
-		switch ( cast( id, GAME_STATE ) ) {
-			case STATE_PLAY:
-				timer = 3;
-			case STATE_FINISH:
-				left.hideButtons();
-				right.hideButtons();
-				left.showScore( right.indexMine );
-				right.showScore( left.indexMine );
-		}
-		return true;
 	}
 	
 	override public function update(elapsed:Float):Void 
@@ -116,39 +125,45 @@ class PlayScene extends Scene
 		if ( e.type != KeyboardEvent.KEY_UP )
 			return;
 			
-		if ( state != STATE_PLAY )
-			return;
+		switch ( cast( state, GAME_STATE ) ) {
+			case STATE_PLAY:
+				switch ( e.keyCode ) {
+					// LEFT
+					case Keyboard.Q:
+						left.fromOpponentDiscard();
+					case Keyboard.W:
+						left.fromOpponentUse();
+					case Keyboard.S:
+						left.fromPileUse();
+					case Keyboard.D:
+						left.fromPilePass();
+					case Keyboard.E:
+						left.changeGuess();
+					case Keyboard.X:
+						left.changeMine();
+					// RIGHT
+					case Keyboard.NUMPAD_6:
+						right.fromOpponentDiscard();
+					case Keyboard.NUMPAD_5:
+						right.fromOpponentUse();
+					case Keyboard.NUMPAD_2:
+						right.fromPileUse();
+					case Keyboard.NUMPAD_1:
+						right.fromPilePass();
+					case Keyboard.NUMPAD_8:
+						right.changeGuess();
+					case Keyboard.NUMPAD_0:
+						right.changeMine();
+				}
+			case STATE_FINISH:
+				switch ( e.keyCode ) {
+					case Keyboard.SPACE:
+						switchState( STATE_PLAY );
+				}
+		}
 			
 		//trace("key "+e.keyCode);
 			
-		switch ( e.keyCode ) {
-			// LEFT
-			case Keyboard.Q:
-				left.fromOpponentDiscard();
-			case Keyboard.W:
-				left.fromOpponentUse();
-			case Keyboard.S:
-				left.fromPileUse();
-			case Keyboard.D:
-				left.fromPilePass();
-			case Keyboard.E:
-				left.changeGuess();
-			case Keyboard.X:
-				left.changeMine();
-			// RIGHT
-			case Keyboard.NUMPAD_6:
-				right.fromOpponentDiscard();
-			case Keyboard.NUMPAD_5:
-				right.fromOpponentUse();
-			case Keyboard.NUMPAD_2:
-				right.fromPileUse();
-			case Keyboard.NUMPAD_1:
-				right.fromPilePass();
-			case Keyboard.NUMPAD_8:
-				right.changeGuess();
-			case Keyboard.NUMPAD_0:
-				right.changeMine();
-		}
 	}
 	
 	private function onDiscard( m:ITEM_MOVE ):Void {

@@ -64,12 +64,6 @@ class Player extends Sprite
 	{
 		super();
 		
-		indexMine = Math.floor( PlayScene.characters.length * Math.random() );
-		indexGuess = Math.floor( PlayScene.characters.length * Math.random() );
-		
-		stashPile = [];
-		stashOpponent = [];
-		
 		onDiscard = new DirectSignaler(this);
 		onPass = new DirectSignaler(this);
 		
@@ -96,6 +90,24 @@ class Player extends Sprite
 		
 		addChild( gui = Render.renderGroupStates("half", null, left ? "left" : "right" ) );
 		labelKeys( keys );
+		//reset();
+	}
+	
+	public function reset():Void {
+		stashPile = [];
+		stashOpponent = [];
+		currentHead = null;
+		currentFace = null;
+		currentBody = null;
+		currentFromOpponent = null;
+		currentFromPile = null;
+		
+		gui.fetch("itemUp").visible = true;
+		gui.fetch("itemDown").visible = true;
+		
+		indexMine = Math.floor( PlayScene.characters.length * Math.random() );
+		indexGuess = Math.floor( PlayScene.characters.length * Math.random() );
+		
 		update();
 	}
 	
